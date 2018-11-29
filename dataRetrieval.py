@@ -7,7 +7,7 @@ repo = g.get_repo("PyGithub/PyGithub")
 
 j = repo.get_stats_participation()
 l = j.all
-with open("data.json", 'w') as outfile:
+with open("docs/data.json", 'w') as outfile:
     json.dump(l , outfile)
 
 # print(j.all)
