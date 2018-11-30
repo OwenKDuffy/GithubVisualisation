@@ -8,26 +8,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     drawChart(parsedData);
   })
 });
-// var json = new Array();
-// loadData();
-// console.log(json);
-// var parsedData = parseData(values);
-// drawChart(parsedData);
-//
-// function loadData() {
-//   $.getJSON('https://api.github.com/repos/PyGithub/PyGithub/stats/participation', function (data) {
-//     json = data.all;
-//   }).error(function(){
-//     console.log('error: json not loaded');
-//   }).done(function() {
-//     console.log(json);
-//     var parsedData = parseData(values);
-//     drawChart(parsedData);
-//   });
-// }
-
-
-//usage:
 
 function parseData(data) {
   console.log(data);
@@ -44,26 +24,18 @@ function parseData(data) {
     }
     return arr;
 
-    // for (var i in data.bpi) {
-    //   arr.push(
-    //     {
-    //       date: new Date(i), //date
-    //       value: +data.bpi[i] //convert string to number
-    //     });
-    //   }
-    //   return arr;
   }
 
   function drawChart(data) {
     console.log(data);
+
     var svgWidth = 1200, svgHeight = 600;
     var margin = { top: 20, right: 20, bottom: 30, left: 50 };
     var width = svgWidth - margin.left - margin.right;
     var height = svgHeight - margin.top - margin.bottom;
-    var svg = d3.select('svg')
+    var svg = d3.select('#chart').append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
-
     var g = svg.append("g")
     .attr("transform",
     "translate(" + margin.left + "," + margin.top + ")"
@@ -78,8 +50,14 @@ function parseData(data) {
   g.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x))
-  .select(".domain")
-  .remove();
+  .append("text")
+  .attr("fill", "#000")
+  .attr("y", 6)
+  .attr("dy", "1.25em")
+  .attr("dx", "50%")
+  .attr("font-size", "16")
+  .attr("text-anchor", "middle")
+  .text("Weeks");
   g.append("g")
   .call(d3.axisLeft(y))
   .append("text")
@@ -87,8 +65,10 @@ function parseData(data) {
   .attr("transform", "rotate(-90)")
   .attr("y", 6)
   .attr("dy", "0.71em")
+  .attr("font-size", "16")
   .attr("text-anchor", "end")
   .text("Num of Commits");
+
   g.append("path")
   .datum(data)
   .attr("fill", "none")

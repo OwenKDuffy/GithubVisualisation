@@ -18,10 +18,17 @@
 }
 
 .text-label {
-  font-size: 10px;
+  font-size: 18px;
   font-family: sans-serif;
 }
 .line-chart
 {
   border: 1px solid lightgray;
+}
+h1 {
+  text-align: center;
+}
+
+p {
+  text-align: center;
 }
