@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   .then(function(data) {
 
     var parsedData = parseData(data);
-    drawChart(parsedData);
+    drawChart(parsedData, '#chart');
   })
 });
 
@@ -26,14 +26,14 @@ function parseData(data) {
 
   }
 
-  function drawChart(data) {
+  function drawChart(data, chartName) {
     console.log(data);
 
     var svgWidth = 1200, svgHeight = 600;
     var margin = { top: 20, right: 20, bottom: 30, left: 50 };
     var width = svgWidth - margin.left - margin.right;
     var height = svgHeight - margin.top - margin.bottom;
-    var svg = d3.select('#chart').append("svg")
+    var svg = d3.select(chartName).append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
     var g = svg.append("g")
@@ -47,6 +47,7 @@ function parseData(data) {
   .y(function(d) { return y(d.value)})
   x.domain(d3.extent(data, function(d) { return d.week }));
   y.domain(d3.extent(data, function(d) { return d.value }));
+
   g.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x))
@@ -58,8 +59,12 @@ function parseData(data) {
   .attr("font-size", "16")
   .attr("text-anchor", "middle")
   .text("Weeks");
+
   g.append("g")
   .call(d3.axisLeft(y))
+  // .scale(y)
+  // .tickSize(-width, 0, 0)
+  // .tickFormat('')
   .append("text")
   .attr("fill", "#000")
   .attr("transform", "rotate(-90)")
@@ -67,7 +72,11 @@ function parseData(data) {
   .attr("dy", "0.71em")
   .attr("font-size", "16")
   .attr("text-anchor", "end")
-  .text("Num of Commits");
+  .text("Number of Commits");
+
+  // g..append('g')
+  // .attr('class', 'grid')
+  // .call(d3.axisLeft()
 
   g.append("path")
   .datum(data)
