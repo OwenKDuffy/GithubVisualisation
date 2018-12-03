@@ -15,6 +15,7 @@ linesOfCode = 0
 authorContributions = {}
 locCount = []
 #
+# for x in range(15):
 for x in range(lengthJ):
     com = j[x]
     # print(j[x].author.login)
@@ -36,8 +37,11 @@ for x in range(lengthJ):
 #
 print(linesOfCode)
 # # # l = j.all
-# json_str = json.dumps(authorContributions)
-# with open("authors.json", 'w') as outfile:
-#     json.dump(json_str , outfile)
+json_str = json.dumps(authorContributions)
+with open("authors.json", 'w') as outfile:
+    json.dump(json_str , outfile)
 
+json_str = json.dumps(locCount)
+with open("data.json", 'w') as outfile:
+    json.dump(json_str , outfile)
 # print(j.all)

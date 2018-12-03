@@ -4,13 +4,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
   .then(function(response) { return response.json(); })
   .then(function(data) {
 
-    var parsedData = parseData(data);
+    var parsedData = parseDataCommitFreq(data);
     drawChart(parsedData, '#chart');
   })
 });
+d3.json("data.json", function(json) {
+  console.log("Read JSON");
+  var parsedCommits = parseDataLOC(loc);
+  drawChart(parsedCommits, '#locChart');
+}
+);
 
-function parseData(data) {
-  console.log(data);
+function parseDataCommitFreq(data) {
+  // console.log(data);
   var arr = [];
   var x = 0;
   for (var i in data.all)
@@ -25,65 +31,81 @@ function parseData(data) {
     return arr;
 
   }
-
-  function drawChart(data, chartName) {
+  function parseDataLOC(data) {
     console.log(data);
+    var arr = [];
+    var x = 0;
+    for (var i in data)
+    {
+      arr.push(
+        {
+          commit: x,
+          value: data[i]
+        });
+        x += 1;
+      }
+      return arr;
 
-    var svgWidth = 1200, svgHeight = 600;
-    var margin = { top: 20, right: 20, bottom: 30, left: 50 };
-    var width = svgWidth - margin.left - margin.right;
-    var height = svgHeight - margin.top - margin.bottom;
-    var svg = d3.select(chartName).append("svg")
-    .attr("width", svgWidth)
-    .attr("height", svgHeight);
-    var g = svg.append("g")
-    .attr("transform",
-    "translate(" + margin.left + "," + margin.top + ")"
-  );
-  var x = d3.scaleLinear().rangeRound([0, width]);
-  var y = d3.scaleLinear().rangeRound([height, 0]);
-  var line = d3.line()
-  .x(function(d) { return x(d.week)})
-  .y(function(d) { return y(d.value)})
-  x.domain(d3.extent(data, function(d) { return d.week }));
-  y.domain(d3.extent(data, function(d) { return d.value }));
+    }
 
-  g.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x))
-  .append("text")
-  .attr("fill", "#000")
-  .attr("y", 6)
-  .attr("dy", "1.25em")
-  .attr("dx", "50%")
-  .attr("font-size", "16")
-  .attr("text-anchor", "middle")
-  .text("Weeks");
+    function drawChart(data, chartName) {
+      // console.log(data);
 
-  g.append("g")
-  .call(d3.axisLeft(y))
-  // .scale(y)
-  // .tickSize(-width, 0, 0)
-  // .tickFormat('')
-  .append("text")
-  .attr("fill", "#000")
-  .attr("transform", "rotate(-90)")
-  .attr("y", 6)
-  .attr("dy", "0.71em")
-  .attr("font-size", "16")
-  .attr("text-anchor", "end")
-  .text("Number of Commits");
+      var svgWidth = 1200, svgHeight = 600;
+      var margin = { top: 20, right: 20, bottom: 30, left: 50 };
+      var width = svgWidth - margin.left - margin.right;
+      var height = svgHeight - margin.top - margin.bottom;
+      var svg = d3.select(chartName).append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight);
+      var g = svg.append("g")
+      .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")"
+    );
+    var x = d3.scaleLinear().rangeRound([0, width]);
+    var y = d3.scaleLinear().rangeRound([height, 0]);
+    var line = d3.line()
+    .x(function(d) { return x(d.week)})
+    .y(function(d) { return y(d.value)})
+    x.domain(d3.extent(data, function(d) { return d.week }));
+    y.domain(d3.extent(data, function(d) { return d.value }));
 
-  // g..append('g')
-  // .attr('class', 'grid')
-  // .call(d3.axisLeft()
+    g.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .append("text")
+    .attr("fill", "#000")
+    .attr("y", 6)
+    .attr("dy", "1.25em")
+    .attr("dx", "50%")
+    .attr("font-size", "16")
+    .attr("text-anchor", "middle")
+    .text("Weeks");
 
-  g.append("path")
-  .datum(data)
-  .attr("fill", "none")
-  .attr("stroke", "red")
-  .attr("stroke-linejoin", "round")
-  .attr("stroke-linecap", "round")
-  .attr("stroke-width", 1.5)
-  .attr("d", line);
-}
+    g.append("g")
+    .call(d3.axisLeft(y))
+    // .scale(y)
+    // .tickSize(-width, 0, 0)
+    // .tickFormat('')
+    .append("text")
+    .attr("fill", "#000")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", "0.71em")
+    .attr("font-size", "16")
+    .attr("text-anchor", "end")
+    .text("Number of Commits");
+
+    // g..append('g')
+    // .attr('class', 'grid')
+    // .call(d3.axisLeft()
+
+    g.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "red")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .attr("d", line);
+  }
